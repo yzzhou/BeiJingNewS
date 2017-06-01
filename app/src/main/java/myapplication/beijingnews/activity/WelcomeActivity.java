@@ -12,6 +12,8 @@ import android.widget.RelativeLayout;
 
 import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.activity.GuideActivity;
+import myapplication.beijingnews.activity.activity.MainActivity;
+import myapplication.beijingnews.activity.uitls.CacheUitls;
 
 public class WelcomeActivity extends AppCompatActivity {
     private RelativeLayout activity_main;
@@ -19,7 +21,7 @@ public class WelcomeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_welcome);
         activity_main = (RelativeLayout)findViewById(R.id.activity_main);
         RotateAnimation ra = new RotateAnimation(0,360,RotateAnimation.RELATIVE_TO_SELF,0.5f,RotateAnimation.RELATIVE_TO_SELF,0.5f);
         ra.setFillAfter(true);
@@ -46,13 +48,23 @@ public class WelcomeActivity extends AppCompatActivity {
     private class MyAnimationListener implements Animation.AnimationListener {
         @Override
         public void onAnimationStart(Animation animation) {
-            Intent intent = new Intent(WelcomeActivity.this, GuideActivity.class);
-            startActivity(intent);
+
         }
 
         @Override
         public void onAnimationEnd(Animation animation) {
+            boolean startMain= CacheUitls.getBoolean(WelcomeActivity.this,"start_main");
+            Intent intent =null;
+            if(startMain){
+            intent = new Intent(WelcomeActivity.this, MainActivity.class);
 
+            }else{
+                intent = new Intent(WelcomeActivity.this, GuideActivity.class);
+
+            }
+            startActivity(intent);
+
+            finish();
         }
 
         @Override
