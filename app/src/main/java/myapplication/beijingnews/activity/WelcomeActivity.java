@@ -1,5 +1,6 @@
 package myapplication.beijingnews.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
@@ -10,6 +11,7 @@ import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 import myapplication.beijingnews.R;
+import myapplication.beijingnews.activity.activity.GuideActivity;
 
 public class WelcomeActivity extends AppCompatActivity {
     private RelativeLayout activity_main;
@@ -44,7 +46,8 @@ public class WelcomeActivity extends AppCompatActivity {
     private class MyAnimationListener implements Animation.AnimationListener {
         @Override
         public void onAnimationStart(Animation animation) {
-
+            Intent intent = new Intent(WelcomeActivity.this, GuideActivity.class);
+            startActivity(intent);
         }
 
         @Override
