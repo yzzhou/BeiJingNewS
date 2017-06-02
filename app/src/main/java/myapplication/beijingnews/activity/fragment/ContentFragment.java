@@ -1,7 +1,6 @@
 package myapplication.beijingnews.activity.fragment;
 
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
@@ -15,6 +14,7 @@ import myapplication.beijingnews.activity.base.BaseFragment;
 import myapplication.beijingnews.activity.base.BasePager;
 import myapplication.beijingnews.activity.pager.HomePager;
 import myapplication.beijingnews.activity.pager.NewsPager;
+import myapplication.beijingnews.activity.pager.NoScrollViewPager;
 import myapplication.beijingnews.activity.pager.SettingPager;
 
 /**
@@ -24,10 +24,16 @@ import myapplication.beijingnews.activity.pager.SettingPager;
 public class ContentFragment extends BaseFragment {
 
     @Bind(R.id.vp)
-    ViewPager vp;
+    NoScrollViewPager vp;
     @Bind(R.id.rg_main)
     RadioGroup rgMain;
     private ArrayList<BasePager> pagers;
+
+//    @ViewInject(R.id.vp)
+//    public NoScrollViewPager vp;
+//
+//    @ViewInject(R.id.rg_content_fragment)
+//    private RadioGroup rg_content_fragment;
 
     @Override
     public View initVeiw() {
