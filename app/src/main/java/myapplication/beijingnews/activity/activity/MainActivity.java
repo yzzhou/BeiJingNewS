@@ -21,12 +21,18 @@ public class MainActivity extends SlidingFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initSlidingNenu();
+        initFragment();
+    }
+
+    private void initSlidingNenu() {
         setBehindContentView(R.layout.activity_left);
         SlidingMenu slidingMenu = getSlidingMenu();
         slidingMenu.setMode(SlidingMenu.LEFT);
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
         slidingMenu.setBehindOffset(DensityUtil.dip2px(this,200));
     }
+
     private void initFragment() {
 
         FragmentManager fm = getSupportFragmentManager();

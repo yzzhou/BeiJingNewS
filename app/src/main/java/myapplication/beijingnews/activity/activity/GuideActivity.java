@@ -13,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,8 +36,9 @@ public class GuideActivity extends AppCompatActivity {
     ImageView ivRedPoint;
     @Bind(R.id.btn_start_main)
     Button btnStartMain;
+    private ArrayList<ImageView> imageViews;
     private int[] ids = {R.drawable.guide_1, R.drawable.guide_2, R.drawable.guide_3};
-    private int leftMagin;
+    private int leftMargin;
 
 
     @Override
@@ -44,23 +47,32 @@ public class GuideActivity extends AppCompatActivity {
         setContentView(R.layout.activity_guide);
         ButterKnife.bind(this);
         initData();
-    }
-
-    private void initData() {
         viewpager.setAdapter(new MyPagerAdapter());
         viewpager.addOnPageChangeListener(new MyOnPagerChanfeListener());
 
+        ivRedPoint.getViewTreeObserver().addOnGlobalLayoutListener(new MyOnGlobalLayoutListener());
+    }
+
+    private void initData() {
+
+        imageViews = new ArrayList<>();
         for (int i = 0; i < ids.length; i++) {
             ImageView imageView = new ImageView(this);
+            imageView.setBackgroundResource(ids[i]);
+            imageViews.add(imageView);
+
+            ImageView point = new ImageView(this);
+            point.setImageResource(R.drawable.point_normal);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DensityUtil.dip2px(this,10), DensityUtil.dip2px(this,10));
+            point.setLayoutParams(params);
+
             if (i != 0) {
-                params.leftMargin = 10;
+                params.leftMargin = DensityUtil.dip2px(GuideActivity.this,10);
             }
-            imageView.setLayoutParams(params);
-            imageView.setImageResource(R.drawable.point_normal);
-            llGroupPoint.addView(imageView);
+
+            llGroupPoint.addView(point);
         }
-        ivRedPoint.getViewTreeObserver().addOnGlobalLayoutListener(new MyOnGlobalLayoutListener());
+
     }
 
 
@@ -70,7 +82,7 @@ public class GuideActivity extends AppCompatActivity {
         @Override
         public void onGlobalLayout() {
             ivRedPoint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            leftMagin = llGroupPoint.getChildAt(1).getLeft() - llGroupPoint.getChildAt(0).getLeft();
+            leftMargin = llGroupPoint.getChildAt(1).getLeft() - llGroupPoint.getChildAt(0).getLeft();
 
         }
     }
@@ -79,10 +91,12 @@ public class GuideActivity extends AppCompatActivity {
 
         @Override
         public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-            int maginLeft = (int) (leftMagin * positionOffset);
-            maginLeft = position * leftMagin + (int) (leftMagin * positionOffset);
+            //int maginLeft = (int) (leftMagin * positionOffset);
+            //maginLeft = position * leftMagin + (int) (leftMagin * positionOffset);
+            float left = leftMargin *(positionOffset + position) ;
+
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ivRedPoint.getLayoutParams();
-            params.leftMargin = maginLeft;
+            params.leftMargin = (int) left;
             ivRedPoint.setLayoutParams(params);
         }
 
@@ -105,7 +119,7 @@ public class GuideActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return ids.length;
+            return imageViews.size();
         }
 
         @Override
@@ -115,8 +129,9 @@ public class GuideActivity extends AppCompatActivity {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ImageView imageView = new ImageView(GuideActivity.this);
-            imageView.setBackgroundResource(ids[position]);
+            //ImageView imageView = new ImageView(GuideActivity.this);
+           // imageView.setBackgroundResource(ids[position]);
+            ImageView imageView = imageViews.get(position);
             container.addView(imageView);
             return imageView;
         }
@@ -129,7 +144,7 @@ public class GuideActivity extends AppCompatActivity {
     @OnClick(R.id.btn_start_main)
     public void onViewClicked() {
         CacheUitls.putBoolean(this,"start_main",true);
-        Intent intent = new Intent(GuideActivity.this,MainActivity.class);
+        Intent intent = new Intent(this,MainActivity.class);
         startActivity(intent);
         finish();
     }

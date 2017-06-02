@@ -14,10 +14,16 @@ public class LeftMenuFragment extends BaseFragment {
     private TextView textView;
     @Override
     public View initVeiw() {
-        textView = new TextView(activity);
-        textView.setText("我是左侧菜单的布局");
+        textView = new TextView(context);
+
         textView.setTextSize(20);
         textView.setTextColor(Color.BLACK);
         return textView;
+    }
+
+    @Override
+    public void initData() {
+        super.initData();
+        textView.setText("左侧菜单");
     }
 }

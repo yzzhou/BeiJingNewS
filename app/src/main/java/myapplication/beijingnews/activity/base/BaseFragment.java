@@ -1,6 +1,6 @@
 package myapplication.beijingnews.activity.base;
 
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -13,17 +13,17 @@ import android.view.ViewGroup;
  */
 
 public abstract  class BaseFragment extends Fragment {
-    public Activity activity;
+    public Context context;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        activity = getActivity();
+        context = getActivity();
     }
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view = initVeiw();
-        return view;
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        return initVeiw();
     }
 
     public abstract   View initVeiw() ;
@@ -35,7 +35,7 @@ public abstract  class BaseFragment extends Fragment {
         initData();
     }
 
-    private void initData() {
+    public void initData() {
 
 
     }
