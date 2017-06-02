@@ -1,7 +1,6 @@
 package myapplication.beijingnews.activity.activity;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -70,9 +69,7 @@ public class GuideActivity extends AppCompatActivity {
 
         @Override
         public void onGlobalLayout() {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                ivRedPoint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-            }
+            ivRedPoint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             leftMagin = llGroupPoint.getChildAt(1).getLeft() - llGroupPoint.getChildAt(0).getLeft();
 
         }
