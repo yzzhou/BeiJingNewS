@@ -1,7 +1,7 @@
 package myapplication.beijingnews.activity.activity;
 
-import android.content.ContentUris;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.uitls.CacheUitls;
+import myapplication.beijingnews.activity.uitls.DensityUtil;
 
 public class GuideActivity extends AppCompatActivity {
 
@@ -52,7 +53,7 @@ public class GuideActivity extends AppCompatActivity {
 
         for (int i = 0; i < ids.length; i++) {
             ImageView imageView = new ImageView(this);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(10, 10);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(DensityUtil.dip2px(this,10), DensityUtil.dip2px(this,10));
             if (i != 0) {
                 params.leftMargin = 10;
             }
@@ -69,7 +70,9 @@ public class GuideActivity extends AppCompatActivity {
 
         @Override
         public void onGlobalLayout() {
-            ivRedPoint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+                ivRedPoint.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
             leftMagin = llGroupPoint.getChildAt(1).getLeft() - llGroupPoint.getChildAt(0).getLeft();
 
         }

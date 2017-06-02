@@ -16,13 +16,13 @@ import myapplication.beijingnews.activity.activity.MainActivity;
 import myapplication.beijingnews.activity.uitls.CacheUitls;
 
 public class WelcomeActivity extends AppCompatActivity {
-    private RelativeLayout activity_main;
+    private RelativeLayout activity_welcome;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        activity_main = (RelativeLayout)findViewById(R.id.activity_main);
+        activity_welcome = (RelativeLayout)findViewById(R.id.activity_welcome);
         RotateAnimation ra = new RotateAnimation(0,360,RotateAnimation.RELATIVE_TO_SELF,0.5f,RotateAnimation.RELATIVE_TO_SELF,0.5f);
         ra.setFillAfter(true);
         ra.setDuration(2000);
@@ -40,7 +40,7 @@ public class WelcomeActivity extends AppCompatActivity {
         set.addAnimation(aa);
         set.addAnimation(sa);
 
-        activity_main.startAnimation(set);
+        activity_welcome.startAnimation(set);
 
         set.setAnimationListener(new MyAnimationListener());
     }
