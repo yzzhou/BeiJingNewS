@@ -80,6 +80,12 @@ public class ContentFragment extends BaseFragment {
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                pagers.get(position).initData();
                 if(position==1){
                     MainActivity mainActivity = (MainActivity) context;
                     mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
@@ -90,15 +96,11 @@ public class ContentFragment extends BaseFragment {
             }
 
             @Override
-            public void onPageSelected(int position) {
-
-            }
-
-            @Override
             public void onPageScrollStateChanged(int state) {
 
             }
         });
+        pagers.get(0).initData();
         rgMain.check(R.id.rb_home);
     }
 
