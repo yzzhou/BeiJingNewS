@@ -60,12 +60,15 @@ public class ContentFragment extends BaseFragment {
                 switch (checkedId){
                     case R.id.rb_home:
                         vp.setCurrentItem(0,false);
+                        pagers.get(0).initData();
                         break;
                     case R.id.rb_news:
                         vp.setCurrentItem(1,false);
+                        pagers.get(1).initData();
                         break;
                     case R.id.rb_setting:
                         vp.setCurrentItem(2,false);
+                        pagers.get(2).initData();
                         break;
                 }
             }
