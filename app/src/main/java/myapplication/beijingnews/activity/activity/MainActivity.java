@@ -10,7 +10,6 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
 import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.fragment.ContentFragment;
 import myapplication.beijingnews.activity.fragment.LeftMenuFragment;
-import myapplication.beijingnews.activity.uitls.DensityUtil;
 
 
 public class MainActivity extends SlidingFragmentActivity {
@@ -30,7 +29,7 @@ public class MainActivity extends SlidingFragmentActivity {
         SlidingMenu slidingMenu = getSlidingMenu();
         slidingMenu.setMode(SlidingMenu.LEFT);
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
-        slidingMenu.setBehindOffset(DensityUtil.dip2px(this,200));
+        slidingMenu.setBehindOffset(200);
     }
 
     private void initFragment() {
@@ -40,5 +39,9 @@ public class MainActivity extends SlidingFragmentActivity {
         ft.replace(R.id.fl_left, new LeftMenuFragment(), LEFT_MENU);
         ft.replace(R.id.fl_main, new ContentFragment(), MAIN_CONTENT);
         ft.commit();
+    }
+    public  LeftMenuFragment getleftMenuFragment(){
+        return (LeftMenuFragment) getSupportFragmentManager().findFragmentByTag(LEFT_MENU);
+
     }
 }
