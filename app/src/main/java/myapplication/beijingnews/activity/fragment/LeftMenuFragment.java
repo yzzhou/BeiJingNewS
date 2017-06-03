@@ -14,6 +14,7 @@ import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.activity.MainActivity;
 import myapplication.beijingnews.activity.base.BaseFragment;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
+import myapplication.beijingnews.activity.pager.NewsPager;
 
 /**
  * Created by zhouzhou on 2017/6/1.
@@ -39,9 +40,18 @@ public class LeftMenuFragment extends BaseFragment {
 
                 MainActivity mainActivity = (MainActivity) context;
                 mainActivity.getSlidingMenu().toggle();
+                switchPager(prePosition);
             }
         });
         return listView;
+    }
+
+    private void switchPager(int position) {
+        MainActivity mainActivity = (MainActivity) context;
+        ContentFragment contentFragment =  mainActivity.getContentFragment();
+        NewsPager  newsPager =contentFragment.getNewSpager();
+        newsPager.switchPager(position);
+
     }
 
     @Override
@@ -55,6 +65,7 @@ public class LeftMenuFragment extends BaseFragment {
             Log.e("TAG",""+datas.get(i).getTitle());
             adapter= new LeftMenuAdapter();
             listView.setAdapter(adapter);
+            switchPager(prePosition);
         }
     }
 
