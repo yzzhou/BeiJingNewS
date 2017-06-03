@@ -1,15 +1,19 @@
 package myapplication.beijingnews.activity.fragment;
 
 import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioGroup;
+
+import com.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import myapplication.beijingnews.R;
+import myapplication.beijingnews.activity.activity.MainActivity;
 import myapplication.beijingnews.activity.base.BaseFragment;
 import myapplication.beijingnews.activity.base.BasePager;
 import myapplication.beijingnews.activity.pager.HomePager;
@@ -60,17 +64,39 @@ public class ContentFragment extends BaseFragment {
                 switch (checkedId){
                     case R.id.rb_home:
                         vp.setCurrentItem(0,false);
-                        pagers.get(0).initData();
+                        //pagers.get(0).initData();
                         break;
                     case R.id.rb_news:
                         vp.setCurrentItem(1,false);
-                        pagers.get(1).initData();
+                        //pagers.get(1).initData();
                         break;
                     case R.id.rb_setting:
                         vp.setCurrentItem(2,false);
-                        pagers.get(2).initData();
+                        //pagers.get(2).initData();
                         break;
                 }
+            }
+        });
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if(position==1){
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+                }else{
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+                }
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
         rgMain.check(R.id.rb_home);
