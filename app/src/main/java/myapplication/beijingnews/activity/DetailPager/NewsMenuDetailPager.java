@@ -8,12 +8,14 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.slidingmenu.lib.SlidingMenu;
 import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import myapplication.beijingnews.R;
+import myapplication.beijingnews.activity.activity.MainActivity;
 import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 
@@ -47,6 +49,30 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
             @Override
             public void onClick(View v) {
                 viewPager_news.setCurrentItem(viewPager_news.getCurrentItem()+1);
+            }
+        });
+        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if(position==0){
+                    //SlidingMenu可以滑动
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+                }else{
+                    //不可以滑动
+                    MainActivity mainActivity = (MainActivity) context;
+                    mainActivity.getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_NONE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
             }
         });
         return view;
