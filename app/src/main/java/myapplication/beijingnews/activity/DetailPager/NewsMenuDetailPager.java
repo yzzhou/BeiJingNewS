@@ -5,7 +5,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
+
+import com.viewpagerindicator.TabPageIndicator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,8 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
     public final  List<NewsCenterBean.DataBean.ChildrenBean> datas;
     private ViewPager viewPager_news;
     private List<TabDetailPager> tabDetailPagers;
+    private TabPageIndicator indicator;
+    private ImageButton ib_next;
     public NewsMenuDetailPager(Context context, List<NewsCenterBean.DataBean.ChildrenBean> children) {
         super(context);
         this.datas = children;
@@ -36,6 +41,14 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
 //        textView.setTextColor(Color.RED);
         View view = View.inflate(context, R.layout.pager_news_menu_datail,null);
         viewPager_news = (ViewPager) view.findViewById(R.id.viewpager_news);
+        indicator = (TabPageIndicator) view.findViewById(R.id.indicator);
+        ib_next = (ImageButton) view.findViewById(R.id.ib_next);
+        ib_next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                viewPager_news.setCurrentItem(viewPager_news.getCurrentItem()+1);
+            }
+        });
         return view;
     }
 
@@ -49,6 +62,7 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
         }
 
         viewPager_news.setAdapter( new NewsMenuDetailPagerAdapter());
+        indicator.setViewPager(viewPager_news);
     }
 
     class NewsMenuDetailPagerAdapter extends PagerAdapter {
@@ -75,6 +89,11 @@ public class NewsMenuDetailPager extends MenuDetailBasePager {
         @Override
         public boolean isViewFromObject(View view, Object object) {
             return view==object;
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return datas.get(position).getTitle();
         }
     }
 }

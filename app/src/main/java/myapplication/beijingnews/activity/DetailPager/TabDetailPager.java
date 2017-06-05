@@ -1,11 +1,10 @@
 package myapplication.beijingnews.activity.DetailPager;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
 
+import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 
@@ -26,9 +25,7 @@ public class TabDetailPager extends MenuDetailBasePager {
 
     @Override
     public View initView() {
-        textView = new TextView(context);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextColor(Color.RED);
+        View view = View.inflate(context, R.layout.pager_tab_detail,null);
         return textView;
     }
 
