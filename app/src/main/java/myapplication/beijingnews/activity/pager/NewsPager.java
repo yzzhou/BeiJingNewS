@@ -97,7 +97,7 @@ public class NewsPager extends BasePager{
         MainActivity mainActivity = (MainActivity) context;
 
         basePagers = new ArrayList<>();
-        basePagers.add(new NewsMenuDetailPager(context));
+        basePagers.add(new NewsMenuDetailPager(context,datas.get(0).getChildren()));
         basePagers.add(new TopicMenuDetailPager(context));
         basePagers.add(new PhotosMenuDetailPager(context));
         basePagers.add(new InteractMenuDetailPager(context));
