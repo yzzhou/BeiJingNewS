@@ -1,6 +1,7 @@
 package myapplication.beijingnews.activity.DetailPager;
 
 import android.content.Context;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -36,10 +37,12 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     RecyclerView recyclerview;
     @Bind(R.id.progressbar)
     ProgressBar progressbar;
-    private  String url;
+    @Bind(R.id.refresh_layout)
+    SwipeRefreshLayout refreshLayout;
+    private String url;
     private PhotosMenuDetailPagerAdapater adapater;
     private List<PhotosMenuDetailPagerBean.DataBean.NewsBean> datas;
-    private boolean isShowList=true;
+    private boolean isShowList = true;
 
     public PhotosMenuDetailPager(Context context, NewsCenterBean.DataBean dataBean) {
         super(context);
@@ -52,7 +55,13 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
 //        textView.setGravity(Gravity.CENTER);
 //        textView.setTextColor(Color.RED);
         View view = View.inflate(context, R.layout.pager_photos_menu_detail, null);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
+        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                getDataFromNet(url);
+            }
+        });
         return view;
     }
 
@@ -60,7 +69,7 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     public void initData() {
         super.initData();
         //textView.setText("组图详情页面的内容");
-        url= ConstantUtils.BASE_URL+dataBean.getUrl();
+        url = ConstantUtils.BASE_URL + dataBean.getUrl();
         getDataFromNet(url);
     }
 
@@ -74,6 +83,7 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
                     public void onError(Call call, Exception e, int id) {
                         Log.e("TAG", "图组请求失败==" + e.getMessage());
                     }
+
                     @Override
                     public void onResponse(String response, int id) {
                         Log.e("TAG", "图组请求成功==" + response);
@@ -85,25 +95,27 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     }
 
     private void processData(String json) {
-        PhotosMenuDetailPagerBean bean = new Gson().fromJson(json,PhotosMenuDetailPagerBean.class);
+        PhotosMenuDetailPagerBean bean = new Gson().fromJson(json, PhotosMenuDetailPagerBean.class);
         datas = bean.getData().getNews();
-        if(datas!=null && datas.size()>0){
+        if (datas != null && datas.size() > 0) {
             progressbar.setVisibility(View.GONE);
-            adapater = new PhotosMenuDetailPagerAdapater(context,datas);
+            adapater = new PhotosMenuDetailPagerAdapater(context, datas);
             recyclerview.setAdapter(adapater);
-            recyclerview.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
-        }else{
+            recyclerview.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+        } else {
             progressbar.setVisibility(View.VISIBLE);
         }
+        refreshLayout.setRefreshing(false);
 
     }
-    public void swichListAndGrid(ImageButton iv){
-        if(isShowList){
-            recyclerview.setLayoutManager(new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false));
+
+    public void swichListAndGrid(ImageButton iv) {
+        if (isShowList) {
+            recyclerview.setLayoutManager(new GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false));
             isShowList = false;
             iv.setImageResource(R.drawable.icon_pic_list_type);
-        }else{
-            recyclerview.setLayoutManager(new LinearLayoutManager(context,GridLayoutManager.VERTICAL,false));
+        } else {
+            recyclerview.setLayoutManager(new LinearLayoutManager(context, GridLayoutManager.VERTICAL, false));
             isShowList = true;
             iv.setImageResource(R.drawable.icon_pic_grid_type);
         }
