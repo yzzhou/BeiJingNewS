@@ -1,19 +1,25 @@
 package myapplication.beijingnews.activity.DetailPager;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import com.google.gson.Gson;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import myapplication.beijingnews.R;
+import myapplication.beijingnews.activity.adapter.PhotosMenuDetailPagerAdapater;
 import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
+import myapplication.beijingnews.activity.domain.PhotosMenuDetailPagerBean;
 import myapplication.beijingnewslibrary.uitls.ConstantUtils;
 import okhttp3.Call;
 
@@ -29,6 +35,8 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     @Bind(R.id.progressbar)
     ProgressBar progressbar;
     private  String url;
+    private PhotosMenuDetailPagerAdapater adapater;
+    private List<PhotosMenuDetailPagerBean.DataBean.NewsBean> datas;
 
     public PhotosMenuDetailPager(Context context, NewsCenterBean.DataBean dataBean) {
         super(context);
@@ -64,9 +72,9 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
                         Log.e("TAG", "图组请求失败==" + e.getMessage());
                     }
                     @Override
-                                public void onResponse(String response, int id) {
+                    public void onResponse(String response, int id) {
                         Log.e("TAG", "图组请求成功==" + response);
-                                        processData(response);
+                        processData(response);
 
                     }
 
@@ -74,6 +82,16 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     }
 
     private void processData(String json) {
+        PhotosMenuDetailPagerBean bean = new Gson().fromJson(json,PhotosMenuDetailPagerBean.class);
+        datas = bean.getData().getNews();
+        if(datas!=null && datas.size()>0){
+            progressbar.setVisibility(View.GONE);
+            adapater = new PhotosMenuDetailPagerAdapater(context,datas);
+            recyclerview.setAdapter(adapater);
+            recyclerview.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));
+        }else{
+            progressbar.setVisibility(View.VISIBLE);
+        }
 
     }
 }
