@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -46,6 +49,7 @@ import okhttp3.Call;
  */
 
 public class TabDetailPager extends MenuDetailBasePager {
+    public static final String READ_ID_ARRAY = "read_id_array";
     private final NewsCenterBean.DataBean.ChildrenBean childrenBean;
     //@Bind(R.id.viewpager)
     ViewPager viewpager;
@@ -62,12 +66,12 @@ public class TabDetailPager extends MenuDetailBasePager {
 
     private String url;
     private List<TabDetailPagerBean.DataBean.TopnewsBean> topnews;
-    private List<TabDetailPagerBean.DataBean.NewsBean> newsBeen;
+    private List<TabDetailPagerBean.DataBean.NewsBean> newsBeanList;
     private MyListAdapter adapter;
     private int prePosition=0;
     private String moreUrl;
     private  boolean isloadingMore = false;
-    private String READ_ID_ARRAY;
+
 
 
     public TabDetailPager(Context context, NewsCenterBean.DataBean.ChildrenBean childrenBean) {
@@ -80,17 +84,21 @@ public class TabDetailPager extends MenuDetailBasePager {
     public View initView() {
         View view = View.inflate(context, R.layout.pager_tab_detail, null);
         ButterKnife.bind(this,view);
-        View viewTopNews = View.inflate(context,R.layout.tab_detail_topenews,null);
-        viewpager = (HorizontalScrollViewPager) viewTopNews.findViewById(R.id.viewpager);
-        tvTitle = (TextView) viewTopNews.findViewById(R.id.tv_title);
-        llPointGroup = (LinearLayout) viewTopNews.findViewById(R.id.ll_point_group);
+
         //lv = (ListView) viewTopNews.findViewById(R.id.lv);
         lv = pull_refresh_list.getRefreshableView();
+
         SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(context);
         soundListener.addSoundEvent(PullToRefreshBase.State.PULL_TO_REFRESH, R.raw.pull_event);
         soundListener.addSoundEvent(PullToRefreshBase.State.RESET, R.raw.reset_sound);
         soundListener.addSoundEvent(PullToRefreshBase.State.REFRESHING, R.raw.refreshing_sound);
         pull_refresh_list.setOnPullEventListener(soundListener);
+
+        View viewTopNews = View.inflate(context,R.layout.tab_detail_topenews,null);
+        viewpager = (HorizontalScrollViewPager) viewTopNews.findViewById(R.id.viewpager);
+        tvTitle = (TextView) viewTopNews.findViewById(R.id.tv_title);
+        llPointGroup = (LinearLayout) viewTopNews.findViewById(R.id.ll_point_group);
+
         lv.addHeaderView(viewTopNews);
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -109,7 +117,12 @@ public class TabDetailPager extends MenuDetailBasePager {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                    if(state ==ViewPager.SCROLL_STATE_DRAGGING){
+                        handler.removeCallbacksAndMessages(null);
+                    }else if(state==ViewPager.SCROLL_STATE_IDLE){
+                        handler.removeCallbacksAndMessages(null);
+                        handler.postDelayed(new MyRunnable(),3000);
+                    }
             }
         });
         pull_refresh_list.setOnRefreshListener(new PullToRefreshBase.OnRefreshListener2<ListView>() {
@@ -135,17 +148,17 @@ public class TabDetailPager extends MenuDetailBasePager {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int realPosition = position- 2;
-                TabDetailPagerBean.DataBean.NewsBean bean = newsBeen.get(realPosition);
+                TabDetailPagerBean.DataBean.NewsBean newsBean = newsBeanList.get(realPosition);
                 String idArray = CacheUitls.getString(context, READ_ID_ARRAY);
-                if(!idArray.contains(bean.getId()+"")){
-                    idArray = idArray + bean.getId()+",";
+                if(!idArray.contains(newsBean.getId()+"")){
+                    idArray = idArray + newsBean.getId()+",";
                     //保存
                     //CacheUtils.putString(context,READ_ID_ARRAY,idArray);
                     CacheUitls.putString(context,READ_ID_ARRAY,idArray);
                     //适配器刷新
                     adapter.notifyDataSetChanged();
                 }
-                String url = ConstantUtils.BASE_URL + bean.getUrl();
+                String url = ConstantUtils.BASE_URL + newsBean.getUrl();
                 //跳转到Activity显示新闻详情内容
                 Intent intent = new Intent(context,NewsDetailActivity.class);
                 intent.setData(Uri.parse(url));
@@ -183,7 +196,23 @@ public class TabDetailPager extends MenuDetailBasePager {
 
         });
     }
+    private InternalHandler handler;
+    class InternalHandler extends Handler{
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int items = (viewpager.getCurrentItem()+1)%topnews.size();
+            viewpager.setCurrentItem(items);
+            handler.postDelayed(new MyRunnable(),3000 );
+    }
+    }
+    class MyRunnable implements  Runnable{
 
+        @Override
+        public void run() {
+            handler.sendEmptyMessage(0);
+        }
+    }
     private void processData(String response) {
         TabDetailPagerBean bean = new Gson().fromJson(response,TabDetailPagerBean.class);
 //        topnews = bean.getData().getTopnews();
@@ -230,23 +259,28 @@ public class TabDetailPager extends MenuDetailBasePager {
                 llPointGroup.addView(point);
             }
             //------------ListView的---------------
-            newsBeen = bean.getData().getNews();
+            newsBeanList = bean.getData().getNews();
             adapter = new MyListAdapter();
             lv.setAdapter(adapter);
         }else{
             isloadingMore = false;
-            newsBeen.addAll(bean.getData().getNews());//把新的数据集合加入到原来集合中，而不是覆盖
+            newsBeanList.addAll(bean.getData().getNews());//把新的数据集合加入到原来集合中，而不是覆盖
             adapter.notifyDataSetChanged();//适配器刷新
 
         }
 //        newsBeen= bean.getData().getNews();
 //        adapter = new MyListAdapter();
 //        lv.setAdapter(adapter);
+        if(handler==null){
+            handler = new InternalHandler();
+        }
+        handler.removeCallbacksAndMessages(null);
+        handler.postDelayed(new MyRunnable(),3000);
     }
      class MyListAdapter extends BaseAdapter{
         @Override
         public int getCount() {
-            return newsBeen.size();
+            return newsBeanList.size();
         }
 
         @Override
@@ -269,10 +303,10 @@ public class TabDetailPager extends MenuDetailBasePager {
             }else{
                 viewHolder = (ViewHolder) convertView.getTag();
             }
-            TabDetailPagerBean.DataBean.NewsBean news = newsBeen.get(position);
-            viewHolder.tvDesc.setText(news.getTitle());
-            viewHolder.tvTime.setText(news.getPubdate());
-            String imageUrl = ConstantUtils.BASE_URL+news.getListimage();
+            TabDetailPagerBean.DataBean.NewsBean newsBean = newsBeanList.get(position);
+            viewHolder.tvDesc.setText(newsBean.getTitle());
+            viewHolder.tvTime.setText(newsBean.getPubdate());
+            String imageUrl = ConstantUtils.BASE_URL+newsBean.getListimage();
             Glide.with(context)
                                         .load(imageUrl)
                                         .placeholder(R.drawable.pic_item_list_default)
@@ -280,7 +314,7 @@ public class TabDetailPager extends MenuDetailBasePager {
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(viewHolder.ivIcon);
             String idArray  = CacheUitls.getString(context,READ_ID_ARRAY);
-            if(idArray.contains(news.getId()+"")){
+            if(idArray.contains(newsBean.getId()+"")){
                 //灰色
                 viewHolder.tvDesc.setTextColor(Color.GRAY);
             }else{
@@ -302,7 +336,7 @@ public class TabDetailPager extends MenuDetailBasePager {
                                 ButterKnife.bind(this, view);
                             }
     }
-    private class MyPagerAdapter extends PagerAdapter {
+    class MyPagerAdapter extends PagerAdapter {
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
             ImageView imageView = new ImageView(context);
@@ -316,6 +350,21 @@ public class TabDetailPager extends MenuDetailBasePager {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(imageView);
             container.addView(imageView);
+            imageView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()){
+                        case MotionEvent.ACTION_DOWN:
+                            handler.removeCallbacksAndMessages(null);
+
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            handler.postDelayed(new MyRunnable(),3000);
+                            break;
+                    }
+                    return true;
+                }
+            });
             return imageView;
 
         }
