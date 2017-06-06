@@ -10,7 +10,7 @@ import com.slidingmenu.lib.app.SlidingFragmentActivity;
 import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.fragment.ContentFragment;
 import myapplication.beijingnews.activity.fragment.LeftMenuFragment;
-import myapplication.beijingnews.activity.uitls.DensityUtil;
+import myapplication.beijingnewslibrary.uitls.DensityUtil;
 
 
 public class MainActivity extends SlidingFragmentActivity {

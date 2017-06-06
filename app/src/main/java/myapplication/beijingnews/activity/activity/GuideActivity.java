@@ -19,8 +19,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import myapplication.beijingnews.R;
-import myapplication.beijingnews.activity.uitls.CacheUitls;
-import myapplication.beijingnews.activity.uitls.DensityUtil;
+import myapplication.beijingnewslibrary.uitls.CacheUitls;
+import myapplication.beijingnewslibrary.uitls.DensityUtil;
 
 public class GuideActivity extends AppCompatActivity {
 

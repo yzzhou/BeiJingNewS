@@ -32,7 +32,7 @@ import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 import myapplication.beijingnews.activity.domain.TabDetailPagerBean;
 import myapplication.beijingnews.activity.pager.HorizontalScrollViewPager;
-import myapplication.beijingnews.activity.uitls.ConstantUtils;
+import myapplication.beijingnewslibrary.uitls.ConstantUtils;
 import okhttp3.Call;
 
 /**

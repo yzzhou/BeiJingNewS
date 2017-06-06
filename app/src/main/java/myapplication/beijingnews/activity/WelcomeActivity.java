@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.activity.GuideActivity;
 import myapplication.beijingnews.activity.activity.MainActivity;
-import myapplication.beijingnews.activity.uitls.CacheUitls;
+import myapplication.beijingnewslibrary.uitls.CacheUitls;
 
 public class WelcomeActivity extends AppCompatActivity {
     private RelativeLayout activity_welcome;

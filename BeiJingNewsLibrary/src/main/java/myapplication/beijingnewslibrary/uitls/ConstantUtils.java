@@ -1,4 +1,4 @@
-package myapplication.beijingnews.activity.uitls;
+package myapplication.beijingnewslibrary.uitls;
 
 /**
  * Created by zhouzhou on 2017/6/3.

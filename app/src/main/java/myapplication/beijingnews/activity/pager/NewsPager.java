@@ -28,8 +28,8 @@ import myapplication.beijingnews.activity.base.BasePager;
 import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 import myapplication.beijingnews.activity.fragment.LeftMenuFragment;
-import myapplication.beijingnews.activity.uitls.CacheUitls;
-import myapplication.beijingnews.activity.uitls.ConstantUtils;
+import myapplication.beijingnewslibrary.uitls.CacheUitls;
+import myapplication.beijingnewslibrary.uitls.ConstantUtils;
 import okhttp3.Call;
 
 /**

@@ -1,4 +1,4 @@
-package myapplication.beijingnews.activity.uitls;
+package myapplication.beijingnewslibrary.uitls;
 
 import android.content.Context;
 
