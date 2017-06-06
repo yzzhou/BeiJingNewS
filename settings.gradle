@@ -1,3 +1,4 @@
-include ':app'
+include ':app', ':BeiJingNewsLibrary'
 include ':library'
 include ':ViewPagerIndicator_library'
+include ':PullToRefresh-library'
