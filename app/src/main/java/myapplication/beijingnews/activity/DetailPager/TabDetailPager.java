@@ -26,6 +26,7 @@ import myapplication.beijingnews.R;
 import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 import myapplication.beijingnews.activity.domain.TabDetailPagerBean;
+import myapplication.beijingnews.activity.pager.HorizontalScrollViewPager;
 import myapplication.beijingnews.activity.uitls.ConstantUtils;
 import okhttp3.Call;
 
@@ -41,6 +42,7 @@ public class TabDetailPager extends MenuDetailBasePager {
     TextView tvTitle;
     //@Bind(R.id.ll_point_group)
     LinearLayout llPointGroup;
+    HorizontalScrollViewPager viewPager;
     @Bind(R.id.lv)
     ListView lv;
 
@@ -61,23 +63,23 @@ public class TabDetailPager extends MenuDetailBasePager {
         View view = View.inflate(context, R.layout.pager_tab_detail, null);
         ButterKnife.bind(this,view);
         View viewTopNews = View.inflate(context,R.layout.tab_detail_topenews,null);
-        viewpager = (ViewPager) viewTopNews.findViewById(R.id.viewpager);
+        viewpager = (HorizontalScrollViewPager) viewTopNews.findViewById(R.id.viewpager);
         tvTitle = (TextView) viewTopNews.findViewById(R.id.tv_title);
         llPointGroup = (LinearLayout) viewTopNews.findViewById(R.id.ll_point_group);
         lv.addHeaderView(viewTopNews);
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                llPointGroup.getChildAt(prePosition).setEnabled(false);
+                llPointGroup.getChildAt(position).setEnabled(true);
+                prePosition=position;
             }
 
             @Override
             public void onPageSelected(int position) {
                 String title = topnews.get(position).getTitle();
                 tvTitle.setText(title);
-                llPointGroup.getChildAt(prePosition).setEnabled(false);
-                llPointGroup.getChildAt(position).setEnabled(true);
-                prePosition=position;
+
             }
 
             @Override
