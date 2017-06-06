@@ -19,12 +19,14 @@ public class BasePager {
     public TextView tv_title;
     public ImageButton ib_menu;
     public FrameLayout fl_content;
+    public ImageButton ib_switch_list_grid;
     public  BasePager(final Context context){
         this.context = context;
         rootView = View.inflate(context, R.layout.base_pager,null);
         tv_title = (TextView) rootView.findViewById(R.id.tv_title);
         ib_menu = (ImageButton) rootView.findViewById(R.id.ib_menu);
         fl_content = (FrameLayout) rootView.findViewById(R.id.fl_content);
+        ib_switch_list_grid = (ImageButton) rootView.findViewById(R.id.ib_switch_list_grid);
         ib_menu.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
