@@ -1,12 +1,14 @@
 package myapplication.beijingnews.activity.DetailPager;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -32,6 +34,7 @@ import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 import myapplication.beijingnews.activity.domain.TabDetailPagerBean;
 import myapplication.beijingnews.activity.pager.HorizontalScrollViewPager;
+import myapplication.beijingnewslibrary.uitls.CacheUitls;
 import myapplication.beijingnewslibrary.uitls.ConstantUtils;
 import okhttp3.Call;
 
@@ -61,6 +64,8 @@ public class TabDetailPager extends MenuDetailBasePager {
     private int prePosition=0;
     private String moreUrl;
     private  boolean isloadingMore = false;
+    private String READ_ID_ARRAY;
+
 
     public TabDetailPager(Context context, NewsCenterBean.DataBean.ChildrenBean childrenBean) {
         super(context);
@@ -121,6 +126,22 @@ public class TabDetailPager extends MenuDetailBasePager {
                     Toast.makeText(context, "没有更多数据了...", Toast.LENGTH_SHORT).show();
                 }
 
+            }
+        });
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int realPosition = position- 2;
+                TabDetailPagerBean.DataBean.NewsBean bean = newsBeen.get(realPosition);
+                String idArray = CacheUitls.getString(context, READ_ID_ARRAY);
+                if(!idArray.contains(bean.getId()+"")){
+                    idArray = idArray + bean.getId()+",";
+                    //保存
+                    //CacheUtils.putString(context,READ_ID_ARRAY,idArray);
+                    CacheUitls.putString(context,READ_ID_ARRAY,idArray);
+                    //适配器刷新
+                    adapter.notifyDataSetChanged();
+                }
             }
         });
         return view;
@@ -250,6 +271,14 @@ public class TabDetailPager extends MenuDetailBasePager {
                                         .error(R.drawable.pic_item_list_default)
                                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                                         .into(viewHolder.ivIcon);
+            String idArray  = CacheUitls.getString(context,READ_ID_ARRAY);
+            if(idArray.contains(news.getId()+"")){
+                //灰色
+                viewHolder.tvDesc.setTextColor(Color.GRAY);
+            }else{
+                //黑色
+                viewHolder.tvDesc.setTextColor(Color.BLACK);
+            }
             return convertView;
         }
     }
