@@ -1,10 +1,12 @@
 package myapplication.beijingnews.activity.DetailPager;
 
 import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 
 import com.google.gson.Gson;
@@ -37,6 +39,7 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
     private  String url;
     private PhotosMenuDetailPagerAdapater adapater;
     private List<PhotosMenuDetailPagerBean.DataBean.NewsBean> datas;
+    private boolean isShowList=true;
 
     public PhotosMenuDetailPager(Context context, NewsCenterBean.DataBean dataBean) {
         super(context);
@@ -93,5 +96,16 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
             progressbar.setVisibility(View.VISIBLE);
         }
 
+    }
+    public void swichListAndGrid(ImageButton iv){
+        if(isShowList){
+            recyclerview.setLayoutManager(new GridLayoutManager(context,2,GridLayoutManager.VERTICAL,false));
+            isShowList = false;
+            iv.setImageResource(R.drawable.icon_pic_list_type);
+        }else{
+            recyclerview.setLayoutManager(new LinearLayoutManager(context,GridLayoutManager.VERTICAL,false));
+            isShowList = true;
+            iv.setImageResource(R.drawable.icon_pic_grid_type);
+        }
     }
 }
