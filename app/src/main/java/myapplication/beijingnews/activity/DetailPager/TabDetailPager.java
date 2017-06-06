@@ -19,6 +19,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.gson.Gson;
 import com.handmark.pulltorefresh.library.PullToRefreshBase;
 import com.handmark.pulltorefresh.library.PullToRefreshListView;
+import com.handmark.pulltorefresh.library.extras.SoundPullEventListener;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
 
@@ -77,6 +78,11 @@ public class TabDetailPager extends MenuDetailBasePager {
         llPointGroup = (LinearLayout) viewTopNews.findViewById(R.id.ll_point_group);
         //lv = (ListView) viewTopNews.findViewById(R.id.lv);
         lv = pull_refresh_list.getRefreshableView();
+        SoundPullEventListener<ListView> soundListener = new SoundPullEventListener<ListView>(context);
+        soundListener.addSoundEvent(PullToRefreshBase.State.PULL_TO_REFRESH, R.raw.pull_event);
+        soundListener.addSoundEvent(PullToRefreshBase.State.RESET, R.raw.reset_sound);
+        soundListener.addSoundEvent(PullToRefreshBase.State.REFRESHING, R.raw.refreshing_sound);
+        pull_refresh_list.setOnPullEventListener(soundListener);
         lv.addHeaderView(viewTopNews);
         viewpager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
