@@ -1,4 +1,4 @@
-include ':app', ':BeiJingNewsLibrary'
+include ':app', ':BeiJingNewsLibrary', ':AndroidAndH5', ':AndroidAndJS', ':PhotoViewsample', ':photoview', ':photoview-library'
 include ':library'
 include ':ViewPagerIndicator_library'
 include ':PullToRefresh-library'
