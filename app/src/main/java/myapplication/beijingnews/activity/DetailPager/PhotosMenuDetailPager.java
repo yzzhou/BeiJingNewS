@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
@@ -23,6 +24,7 @@ import myapplication.beijingnews.activity.adapter.PhotosMenuDetailPagerAdapater;
 import myapplication.beijingnews.activity.base.MenuDetailBasePager;
 import myapplication.beijingnews.activity.domain.NewsCenterBean;
 import myapplication.beijingnews.activity.domain.PhotosMenuDetailPagerBean;
+import myapplication.beijingnewslibrary.uitls.CacheUitls;
 import myapplication.beijingnewslibrary.uitls.ConstantUtils;
 import okhttp3.Call;
 
@@ -70,10 +72,14 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
         super.initData();
         //textView.setText("组图详情页面的内容");
         url = ConstantUtils.BASE_URL + dataBean.getUrl();
+        String saveJson = CacheUitls.getString(context, url);
+        if(!TextUtils.isEmpty(saveJson)){
+            processData(saveJson);
+        }
         getDataFromNet(url);
     }
 
-    private void getDataFromNet(String url) {
+    private void getDataFromNet( final String url) {
         OkHttpUtils
                 .get()
                 .url(url)
@@ -87,6 +93,7 @@ public class PhotosMenuDetailPager extends MenuDetailBasePager {
                     @Override
                     public void onResponse(String response, int id) {
                         Log.e("TAG", "图组请求成功==" + response);
+                        CacheUitls.putString(context,url,response);
                         processData(response);
 
                     }
